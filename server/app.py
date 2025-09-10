@@ -1,16 +1,13 @@
-#!/usr/bin/env python3
-
 import os
+
 from flask import Flask, request, current_app, g, make_response
 
 app = Flask(__name__)
 
-# Hook to set app path before each request
 @app.before_request
 def app_path():
     g.path = os.path.abspath(os.getcwd())
 
-# Route that uses request, current_app, and g
 @app.route('/')
 def index():
     host = request.headers.get('Host')
@@ -20,7 +17,11 @@ def index():
         <h2>The name of this application is {appname}</h2>
         <h3>The path of this application on the user's device is {g.path}</h3>
     '''
-    return make_response(response_body, 200)
+
+    status_code = 200
+    headers = {}
+
+    return make_response(response_body, status_code, headers)
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
